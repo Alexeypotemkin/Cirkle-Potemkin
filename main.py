@@ -1,6 +1,7 @@
 import sys
 import random
-from PyQt6.QtWidgets import QApplication, QMainWindow
+from PyQt6.QtWidgets import (QApplication, QMainWindow, QWidget,
+                             QVBoxLayout, QPushButton)
 from PyQt6.QtGui import QPainter, QColor
 from PyQt6.QtCore import Qt, QPointF
 from PyQt6 import uic
@@ -19,17 +20,23 @@ class CirclePainter(QMainWindow):
 
     def add_circle(self):
         diameter = random.randint(20, 100)
+        color = QColor(
+            random.randint(0, 255),
+            random.randint(0, 255),
+            random.randint(0, 255)
+        )
 
         max_x = self.width() - diameter - 20
         max_y = self.height() - diameter - 100
 
         if max_x > 0 and max_y > 0:
-            x = random.randint(20, max_x)
-            y = random.randint(50, max_y)
+            x = random.randint(0, max_x)
+            y = random.randint(0, max_y)
 
             self.circles.append({
                 'center': QPointF(x + diameter / 2, y + diameter / 2),
-                'radius': diameter / 2
+                'radius': diameter / 2,
+                'color': color
             })
 
             self.update()
@@ -41,7 +48,7 @@ class CirclePainter(QMainWindow):
 
             for circle in self.circles:
                 painter.setPen(Qt.PenStyle.NoPen)
-                painter.setBrush(QColor(255, 255, 0))
+                painter.setBrush(circle['color'])
                 painter.drawEllipse(circle['center'], circle['radius'], circle['radius'])
         finally:
             painter.end()
